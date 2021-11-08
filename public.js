@@ -8,18 +8,18 @@ class SpineForm extends React.Component {
 		this.state = {
 			initialized: false,
 			amount: 0,
-			lines: 16,
+			lines: 15,
 			chars: 45,
 			unit: 400,
 			sections: 1,
 			thickness: .12,
-			density: 0.85,
+			density: 0.9,
 			chapters: 1,
 		};
 	}
 
 	page() {
-		const { amount, lines, chars, unit, density } = this.state;
+		const { amount, lines, chars, unit, density, thickness } = this.state;
 		let pages = amount * unit / chars / lines;
 		pages = Math.ceil( pages / density );
 		if ( 0 !== pages % 2 ) {
@@ -101,6 +101,14 @@ class SpineForm extends React.Component {
 								</label>
 							</div>
 						</div>
+						<div className="field">
+							<div className="control">
+								<label>
+									紙厚（mm）
+									<input className="input" step={ 0.01 } type="number" placeholder="0.12" value={ thickness } onChange={ ( e ) => this.setState( { thickness: parseFloat( e.target.value ) } ) }/>
+								</label>
+							</div>
+						</div>
 					</div>
 				</div>
 				<hr />
@@ -111,12 +119,14 @@ class SpineForm extends React.Component {
 						<tr>
 							<th>ページ数</th>
 							<th>背幅</th>
+							<th>台数</th>
 						</tr>
 						</thead>
 						<tbody>
 						<tr>
 							<td>{ this.totalPage() }ページ</td>
 							<td>{ Math.floor( Math.ceil( this.totalPage() / 2 ) * thickness ) }mm</td>
+							<td>{ Math.floor( this.totalPage() / 16 ) }<small>（余り{ this.totalPage() % 16 }）</small></td>
 						</tr>
 						</tbody>
 					</table>
